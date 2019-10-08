@@ -1,4 +1,5 @@
 import sys
+import queue
 if len(sys.argv) == 4:
     Cipher = sys.argv[1]
     Key = sys.argv[2]
@@ -10,7 +11,7 @@ if len(sys.argv) == 4:
         for i in Ctext:
             p = (ord(i) - ord('A') - k) % 26
             Ptext+= chr(p + 97)
-        print(Ptext)
+        print(Ptext.lower())
     elif(Cipher == "playfair"):
         rk = []
         Cset = set()
@@ -56,7 +57,7 @@ if len(sys.argv) == 4:
                 plaintext += ctable[(x1-1)%5][y1] + ctable[(x2-1)%5][y1]
             else:
                 plaintext += ctable[x1][y2] + ctable[x2][y1]
-        print(plaintext)#記得切成小寫
+        print(plaintext.lower())
 
     elif(Cipher == 'vernam'):
         binKey = []
@@ -74,7 +75,7 @@ if len(sys.argv) == 4:
             else:
                 binP.append(binP[i-len(Key)] ^ bintext[i])
                 PtextV += chr((binP[i-len(Key)] ^ bintext[i])+65)
-        print(PtextV)
+        print(PtextV.lower())
     
     elif(Cipher == 'row'):
         keynum = []
@@ -91,14 +92,59 @@ if len(sys.argv) == 4:
             for j in range(maxCol):
                 plaintextR += Ptable[i][j]
                 
-        print(plaintextR)
-
-
-
-                
-
-
-        
-        
+        print(plaintextR.lower())
+    elif(Cipher == 'rail_fence'):
+        textplaceX = 0
+        textplaceY = 0
+        counter = 0
+        keyInt = int(Key)
+        Fence = [[0 for i in range(len(Ctext))]for j in range(keyInt)]        
+        for j in range(0,len(Ctext),keyInt-1):
+            counter += 1
+            for i in range(keyInt - 1):
+                if counter % 2 == 1:
+                    if(textplaceY>len(Ctext)-1):
+                        break
+                    Fence[textplaceX][textplaceY] = 1
+                    textplaceX += 1
+                    textplaceY += 1
+                    #print(textplaceX,textplaceY)
+                if counter % 2 == 0 :
+                    if(textplaceY>len(Ctext)-1):
+                        break
+                    Fence[textplaceX][textplaceY] = 1
+                    textplaceX -= 1
+                    textplaceY += 1
+                    #print(textplaceX,textplaceY)
+        #print(Fence)
+        q = queue.Queue(maxsize=len(Ctext))
+        for i in range(len(Ctext)):
+            q.put(Ctext[i])
+        for i in range(keyInt):
+            for j in range(len(Ctext)):
+                if(Fence[i][j]==1):
+                   Fence[i][j] = q.get()
+        plaintextF = ""
+        textplaceX = 0
+        textplaceY = 0
+        counter = 0
+        for j in range(0,len(Ctext),keyInt-1):
+            counter += 1
+            for i in range(keyInt - 1):
+                if counter % 2 == 1:
+                    if(textplaceY>len(Ctext)-1):
+                        break
+                    plaintextF += Fence[textplaceX][textplaceY]
+                    textplaceX += 1
+                    textplaceY += 1
+                    #print(textplaceX,textplaceY)
+                if counter % 2 == 0 :
+                    if(textplaceY>len(Ctext)-1):
+                        break
+                    plaintextF += Fence[textplaceX][textplaceY]
+                    textplaceX -= 1
+                    textplaceY += 1
+                    #print(textplaceX,textplaceY)
+        print(plaintextF.lower())       
 else:
     print("Please follow the input rule")
