@@ -148,3 +148,4 @@ if len(sys.argv) == 4:
         print(plaintextF.lower())       
 else:
     print("Please follow the input rule")
+    
