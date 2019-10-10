@@ -17,7 +17,6 @@ def encryptPlayfair(Key, plaintext):
     newkey = sorted(set(key), key = Key.index)
     for i in range (len(newkey)):
         if(newkey[i] == 'j'):
-            print("!")
             newkey[i] = 'i'
     playfairSquare += newkey
     for i in range (ord('A'), ord('Z') + 1):
@@ -47,7 +46,6 @@ def encryptvernam(key, plaintext):
     result = ""
     key += plaintext
     for i in range (len(plaintext)):
-        print(((ord(plaintext[i]) - 97) ^ (ord(key[i]) - 97)) + 65)
         result += chr(((ord(plaintext[i]) - 97) ^ (ord(key[i]) - 97)) + 65)
     return result.upper()
 
