@@ -49,7 +49,7 @@ def encryptvernam(key, plaintext):
     for i in range (len(plaintext)):
         print(((ord(plaintext[i]) - 97) ^ (ord(key[i]) - 97)) + 65)
         result += chr(((ord(plaintext[i]) - 97) ^ (ord(key[i]) - 97)) + 65)
-    #return result.upper()
+    return result.upper()
 
 
 def encryptRow(key, plaintext):
