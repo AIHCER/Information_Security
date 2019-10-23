@@ -102,24 +102,22 @@ def fastXOR(x,y):
     return [int(i)^int(j) for i,j in zip(x,y)]
 def shiftGuy(l,r,n):
     return l[n:]+l[:n],r[n:]+r[:n]
-def stringTobin(str):
-    arr = []
-    for i in str:
-        arr.append(i)
-    return arr
 def f_fuction(rightExtend):
     blocks = splitList(rightExtend,6)
     result = list()
     for i in range(len(blocks)):
         block = blocks[i]        
         row = int(str(block[0])+str(block[5]),2)
+        #col = int(''.join([str(x) for x in block[1:][:-1]]),2)
+        #print(row,col)
         col = int(str(block[1])+str(block[2])+str(block[3])+str(block[4]),2)
         value = bin(s_box[i][row][col])[2:]      
         while(len(value)<4):
             value = '0' + value
         #print(value)
         result+=[int(x) for x in value]
-    #print(result)
+        #print(value)
+
     return result
 
 if len(sys.argv) == 3:
@@ -140,18 +138,21 @@ if len(sys.argv) == 3:
     for i in Key:
         Key_list.append(i)
     Plaintext_List = p(Plaintext_List,initial)
+    
     #for i in range(64):
     #    test += str(Plaintext_List[i])
     #print(test)
+    test = ''
     Key_list = p(Key_list,cp_1)
     keys = []
     l,r = splitList(Key_list,28)
     result = list()
     for i in range(16):
         l,r = shiftGuy(l,r,shift[i])
-        temp = l+r
+        temp = l+r  
         keys.append(p(temp,cp_2))
-    left,right = splitList(Plaintext,32)
+        
+    left,right = splitList(Plaintext_List,32)
     temp = None
     for i in range(16):
         rightExtend = p(right,eTable)
@@ -160,17 +161,20 @@ if len(sys.argv) == 3:
         temp = p(temp,sP)
         temp = fastXOR(left,temp)
         left = right
-        right = temp
+        right = temp   
+       # print(testhl,testhr,testk)
     result += p(right+left,PI_1)
     final = ''
     f = ''
+
     bytes_carrier = splitList(result,4)
     for i in range(16):
         for j in range(4):
             final += str(bytes_carrier[i][j])
         f+=hex(int(final,2))[2:]
         final = ''
-    print(f)
+    f=f.upper()
+    print('0x'+f)
             
     
     
