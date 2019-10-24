@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+#the following are tables
 ip = [58, 50, 42, 34, 26, 18, 10, 2,
       60, 52, 44, 36, 28, 20, 12, 4,
       62, 54, 46, 38, 30, 22, 14, 6,
@@ -83,6 +84,7 @@ sbox_table  = [[14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7,
                  7, 11,  4,  1,  9, 12, 14,  2,  0,  6, 10, 13, 15,  3,  5,  8,
                  2,  1, 14,  7,  4, 10,  8, 13, 15, 12,  9,  0,  3,  5,  6, 11]]
 
+#the following are the functions DES need
 def initPerm(ciphertest):
     result = ''
     for i in range(64):
@@ -148,27 +150,38 @@ def finiperm(aftersbox):
     return result
 
 
-
+#we get the key and ciphertext from argv
+#and delete the '0x' in the beginning
 ciphertest = sys.argv[2][2:]
 key = sys.argv[1][2:]
+#We convert to key and ciphertext from hex to bin in the following step
 ciphertest = hex2bin(ciphertest, '064b')
 key = hex2bin(key, '064b')
+#Initial permutaion is done here
 afterIp = initPerm(ciphertest)
+#pc1_permutation is done here
 afshift_key = pc1(key)
 
+#The following is the 16 repeatable steps in DES process
 for i in range(16):
     afshift_key = rightshift(afshift_key, i)
     the_key = pc2(afshift_key)
     left = afterIp[:32]
     right = afterIp[32:]
-    afterExpansion = expansion(right)#V
-    afterxor = xor(afterExpansion, the_key, 48)#V
-    aftersbox = sboxperm(afterxor)#V
+    #the following 4 function is the "f" in DES
+    afterExpansion = expansion(right)
+    afterxor = xor(afterExpansion, the_key, 48)
+    aftersbox = sboxperm(afterxor)
     afterP = Perm(aftersbox)
+    #after "f", we xor the left of and right
     afterLRxor = xor(left, afterP, 32)
+    #switch the position of the ciphertext below
     afterIp = right + afterLRxor
 
+#after the 16 round steps, switch the position of ciphertext again
 afterIp = afterLRxor + right
+#do the finish permutation
 plaintest = format(int(finiperm(afterIp),2), 'x')
+#insert the '0x' in front of the plaintest we get
 plaintest = '0x' + plaintest
 print (plaintest)
