@@ -165,10 +165,10 @@ for i in range(16):
     afterxor = xor(afterExpansion, the_key, 48)#V
     aftersbox = sboxperm(afterxor)#V
     afterP = Perm(aftersbox)
-    afterLFxor = xor(left, afterP, 32)
-    afterIp = right + afterLFxor
+    afterLRxor = xor(left, afterP, 32)
+    afterIp = right + afterLRxor
 
-afterIp = afterLFxor + right
+afterIp = afterLRxor + right
 plaintest = format(int(finiperm(afterIp),2), 'x')
 plaintest = '0x' + plaintest
 print (plaintest)
