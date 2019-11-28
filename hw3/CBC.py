@@ -4,25 +4,41 @@ import sys
 import random
 import string
 
-img = Image.open('./hw3/1200px-NewTux.svg.png')
-print(img.size)
-pixel = img.load()
-for x in range(img.size[0]):
-    for y in range(img.size[1]):
-        r = pixel[x,y]
-        print (r)
-#plaintext = 'abcdefghijklmnop'
-#iv = 16* 'a'
-##iv = ''.join(random.choice(letters) for i in range (16))
-#key = 16 * 'a'
-#key_stream = ''
-#key_stream_list = [ord(a) ^ ord(b) for a,b in zip(plaintext, iv)]
+
+ppm = ("./myppm.ppm")
+im = Image.open('./1200px-NewTux.svg.png').convert('RGB')
+p = Image.open(ppm)
+key = 16 * 'a'
+arr = bytes(p.tobytes())
+print (len(arr))
+encrypt = ""
+arrBlock = ''
+key_stream = ''
+padding = 16 - len(arr) % 16
+arr += bytes(padding * ".".encode('utf8'))
+iv = 16* 'a'
+cipher = AES.new(key.encode("utf8"), AES.MODE_ECB)
+#iv = ''.join(random.choice(letters) for i in range (16))
+for i in range(int(len(arr)/16)):
+    i = int(len(arr)/16) - 1 
+    for j in range(16):
+        arrBlock += chr(arr[i*16 + j])
+    key_stream_list = [ord(a) ^ ord(b) for a,b in zip(arrBlock, iv)]
+    for i in (key_stream_list):
+        key_stream += chr(i)
+    tempList = cipher.encrypt(key_stream.encode('utf8'))
+    for i in range(len(tempList)):
+        encrypt += chr(tempList[i])
+    print(key_stream)
+    key_stream = ''
+encrypt = encrypt[:-padding]
+Image.frombytes("RGB",p.size,encrypt,"raw","RGB").save(ppm)
+
+
 #plaintext2 = ''
 #print(key_stream_list)
-#for i in (key_stream_list):
-#    key_stream += chr(i)
+
 #print(key_stream)
-#cipher = AES.new(key.encode("utf8"), AES.MODE_ECB)
 #ciphertext = cipher.encrypt(key_stream.encode("utf8"))
 #print(ciphertext)
 #
