@@ -15,7 +15,6 @@ padding = (16 - len(arr) % 16) % 16
 arr += bytes(padding * ".".encode('utf8'))
 iv = bytes(16* 'a'.encode('utf8'))
 cipher = AES.new(key.encode("utf8"), AES.MODE_ECB)
-#iv = ''.join(random.choice(letters) for i in range (16))
 for i in range(int(len(arr)/16)):
     arrBlock = arr[i*16:i*16+16]
     tempList = cipher.decrypt(arrBlock)

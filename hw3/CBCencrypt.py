@@ -5,7 +5,7 @@ import random
 import string
 
 im = Image.open(sys.argv[1]).convert('RGB')
-arr = im.tobytes() #bytes(p.tobytes())
+arr = im.tobytes() 
 result = "CBCencrypt.png"
 encrypt = b""
 arrBlock = ''
@@ -20,23 +20,7 @@ for i in range(int(len(arr)/16)):
     key_stream = bytes([a ^ b for a,b in zip(arrBlock, iv)])
     iv = key_stream
     encrypt += cipher.encrypt(key_stream)
-    #print(key_stream)
 encrypt = encrypt[:-padding]
 s = Image.frombytes("RGB",im.size,bytes(encrypt))
 s.save(result, "png")
 s.show()
-
-
-
-#plaintext2 = ''
-#print(key_stream_list)
-
-#print(key_stream)
-#ciphertext = cipher.encrypt(key_stream.encode("utf8"))
-#print(ciphertext)
-#
-#
-#before_iv = cipher.decrypt(ciphertext)
-#for i in range(len(before_iv)):
-#    plaintext2 += (chr(before_iv[i] ^ ord(iv[i])))
-#print(plaintext2)
