@@ -13,7 +13,7 @@ key_stream = ''
 padding = 16 - len(arr) % 16
 arr += bytes(padding * ".".encode('utf8'))
 iv =  bytes('abdfdsaasdfddijk'.encode('utf8'))
-key = 16 * 'a'
+key = sys.argv[2]
 cipher = AES.new(key.encode("utf8"), AES.MODE_ECB)
 for i in range(int(len(arr)/16)):
     arrBlock=arr[i*16:i*16+16]

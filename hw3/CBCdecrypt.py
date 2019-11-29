@@ -4,8 +4,8 @@ import sys
 import random
 import string
 
-im = Image.open(sys.argv[1]).convert('RGB')
-key = 16 * 'a'
+im = Image.open(sys.argv[1]).convert('RGB')  #開檔
+key = sys.argv[2]
 arr = im.tobytes()
 result = "CBCdecrypt.png"
 plaintext = b""
@@ -25,4 +25,3 @@ plain_part = plaintext[:-padding]
 s = Image.frombytes("RGB",im.size,bytes(plaintext))
 s.save(result, "png")
 s.show()
-
