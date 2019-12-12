@@ -82,4 +82,20 @@ if(option == 'init'):
             key_pri += fi_q
         
         print('p = ', p, 'q = ', q, 'n = ', n, 'public key = ', key_pub, 'private key = ', key_pri)
-        
+
+if(option == '-e'):
+    plaintext = int(sys.argv[2].encode('utf-8').hex(),16)
+    print(plaintext)
+    n = int(sys.argv[3])
+    key_pub = int(sys.argv[4])
+    #encrypt = pow(plaintext,e) % n
+    encrypt = sam(plaintext,key_pub,n)
+    #print(plaintext)
+    print(encrypt)
+if(option == '-d'):
+    ciphertext = int(sys.argv[2])
+    n = int(sys.argv[3])
+    key_pri = int(sys.argv[4])
+    decrypt = sam(ciphertext,key_pri,n)
+    result = bytearray.fromhex(hex(decrypt)[2:-1]).decode()
+    print(result)   
