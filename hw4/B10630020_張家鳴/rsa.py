@@ -13,7 +13,7 @@ def sam(x, H, n):
     H = bin(H)[2:]
     result = 1
     for i in H:
-        result = pow(result, 2, n)
+        result = int(pow(result, 2, n))
         if(i == '1'):
             result = (result * x) % n
     return result
@@ -25,12 +25,12 @@ def MRtest(p):
     k = 0
     m = p_minus
     while(m % 2 == 0):
-        m = int(m / 2)
+        m //= 2
         k += 1
     for _ in range(0, 5):
         a = random.randint(2, p - 2)
         b = sam(a, int(m), p)
-        if(b == 0 and b != p_minus):
+        if(b != 1 and b != p_minus):
             i = 1
             while(i < k and b != p_minus):
                 b = sam(b, 2, p)
@@ -59,7 +59,6 @@ def egcd(a, b):
 option = sys.argv[1]
 if(option == 'init'):
     bitsize = int(sys.argv[2])
-    print(bitsize)
     if((bitsize) < 2 or (bitsize % 2 != 0)): 
         print("invalid bit size")
         exit(0)
@@ -85,7 +84,7 @@ if(option == 'init'):
 
 if(option == '-e'):
     plaintext = int(sys.argv[2].encode('utf-8').hex(),16)
-    print(plaintext)
+    #print(plaintext)
     n = int(sys.argv[3])
     key_pub = int(sys.argv[4])
     #encrypt = pow(plaintext,e) % n
@@ -97,5 +96,5 @@ if(option == '-d'):
     n = int(sys.argv[3])
     key_pri = int(sys.argv[4])
     decrypt = sam(ciphertext,key_pri,n)
-    result = bytearray.fromhex(hex(decrypt)[2:-1]).decode()
+    result = bytearray.fromhex(hex(decrypt)[2:]).decode()
     print(result)   
